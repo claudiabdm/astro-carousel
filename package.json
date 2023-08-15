@@ -1,5 +1,5 @@
 {
-  "name": "carousel",
+  "name": "astro-carousel",
   "version": "0.0.1",
   "type": "module",
   "exports": {
