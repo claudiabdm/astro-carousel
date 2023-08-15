@@ -1,0 +1,76 @@
+---
+import Layout from "../layouts/Layout.astro";
+import Carousel from "~";
+
+const images = [
+  "https://a.storyblok.com/f/95455/1350x1080/3ef7748922/p5240368.jpg",
+  "https://a.storyblok.com/f/95455/1350x1080/231d2407ea/p4030184.jpg",
+  "https://a.storyblok.com/f/95455/1350x1080/4aee2a00f4/p5240221.jpg",
+];
+---
+
+<Layout title="Welcome to Astro.">
+  <main>
+    <div class="entry">
+      <ul class="entry__entries" id="carouselTargetList">
+        {
+          images.map((img, i) => {
+            return (
+              <li class="entry__elem">
+                <a
+                  href={`./?image=${i}`}
+                  data-carousel-index={i}
+                  class="entry__link"
+                >
+                  <img src={img} alt="" class="entry__img"/>
+                </a>
+              </li>
+            );
+          })
+        }
+      </ul>
+      <Carousel>
+        <ul id="slides" class="carousel__slides">
+          {
+            images.map((img: any) => (
+              <li class:list={["carousel__slide"]}>
+                <img src={img} alt="" class="entry__img"/>
+              </li>
+            ))
+          }
+        </ul>
+      </Carousel>
+    </div>
+  </main>
+</Layout>
+
+<style lang="scss" is:global>
+  .entry {
+
+    &__entries {
+      display: grid;
+	  grid-template-columns: 1fr 1fr 1fr;
+	  justify-content: center;
+	  align-items: center;
+	  gap: 8px;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    &__elem {
+      &:hover {
+        cursor: pointer;
+      }
+    }
+
+	&__img {
+		width: 100%;
+	}
+
+    &__link {
+      display: block;
+    }
+
+  }
+</style>
