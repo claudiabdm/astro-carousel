@@ -321,7 +321,7 @@
         <slot />
 
         <!-- Next Link -->
-        <a class="carousel__button" aria-label="Go to next photo" id="nextLink">
+        <a class="carousel__button carousel__button--right" aria-label="Go to next photo" id="nextLink">
           <svg
             class="carousel__svg"
             id="next"
@@ -425,6 +425,10 @@
       }
       &:focus-visible {
         outline: dashed 2px var(--primary);
+      }
+
+      &--right {
+        justify-self: end;
       }
     }
     &__svg {
