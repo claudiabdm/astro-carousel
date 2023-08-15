@@ -10,7 +10,11 @@
     "index.ts"
   ],
   "keywords": [
-    "astro-component"
+    "astro-component",
+    "astro",
+    "carousel",
+    "photos",
+    "images"
   ],
   "scripts": {},
   "devDependencies": {
