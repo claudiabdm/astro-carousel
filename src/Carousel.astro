@@ -1,6 +1,6 @@
 <script>
   // @ts-ignore
-	// TODO: a11yDialog types
+  // TODO: a11yDialog types
   import A11yDialog from "https://cdn.jsdelivr.net/npm/a11y-dialog@^7.5.2/dist/a11y-dialog.esm.js";
 
   const carouselTargetList = document.getElementById("carouselTargetList");
@@ -298,7 +298,7 @@
       <div class="carousel__main">
         <!-- Prev Link -->
         <a
-          class="carousel__button"
+          class="carousel__button carousel__button--arrow"
           aria-label="Go to previous photo"
           id="prevLink"
         >
@@ -321,7 +321,11 @@
         <slot />
 
         <!-- Next Link -->
-        <a class="carousel__button carousel__button--right" aria-label="Go to next photo" id="nextLink">
+        <a
+          class="carousel__button carousel__button--arrow carousel__button--right"
+          aria-label="Go to next photo"
+          id="nextLink"
+        >
           <svg
             class="carousel__svg"
             id="next"
@@ -394,7 +398,7 @@
       position: absolute;
       display: flex;
       background-color: #fff;
-      border: 20px solid #fff;
+      border: 5px solid #fff;
       box-shadow: 0px 0px 20px 1px #cacaca;
       list-style: none;
       visibility: visible;
@@ -407,6 +411,10 @@
         visibility: visible;
         opacity: 1;
         z-index: 1;
+      }
+
+      @media screen and (min-width: 768px) {
+        border-width: 20px;
       }
     }
 
@@ -430,10 +438,27 @@
       &--right {
         justify-self: end;
       }
+      &--arrow {
+        display: flex;
+        align-items: center;
+        width: 100%;
+        height: 50vh;
+        margin: 0;
+        @media screen and (min-width: 768px) {
+          display: block;
+          width: 48px;
+          height: 48px;
+          margin: 1rem;
+        }
+      }
     }
     &__svg {
-      width: 48px;
-      height: 48px;
+      width: 24px;
+      height: 24px;
+      @media screen and (min-width: 768px) {
+        width: 48px;
+        height: 48px;
+      }
     }
   }
 </style>
