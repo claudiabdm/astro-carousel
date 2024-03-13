@@ -12,13 +12,16 @@
   "keywords": [
     "astro-component",
     "astro",
+    "withastro",
     "carousel",
     "photos",
     "images",
     "a11y"
   ],
   "scripts": {
-    "dev": "cd demo && astro dev"
+    "dev": "cd demo && astro dev",
+    "build": "cd demo && astro build",
+    "preview": "cd demo && astro preview"
   },
   "devDependencies": {
     "astro": "^4.5.0",
