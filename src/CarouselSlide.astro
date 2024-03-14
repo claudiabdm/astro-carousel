@@ -1,0 +1,85 @@
+---
+import type { ComponentProps } from "astro/types";
+import { Picture } from "astro:assets";
+import Loading from "./Loading.astro";
+
+type Props = ComponentProps<typeof Picture> & {
+    src: string;
+    alt: string;
+};
+const { width, height } = Astro.props;
+const uuid = crypto.randomUUID();
+const aspectRatio = Number(width) / Number(height);
+const minWidth = aspectRatio > 1 ? 'calc(100% - (20px * 2))' : `calc(${aspectRatio * 100}% - (20px * 2))`;
+---
+
+<script>
+    class AstroImageWrapper extends HTMLElement {
+        constructor() {
+            super();
+            const uuid = this.dataset.uuid;
+            const component = document.querySelector(`[data-uuid="${uuid}"]`);
+            if (component) {
+                const image = component.querySelector("img");
+                if (image) {
+                    const isComplete = (image as HTMLImageElement).complete;
+                    const loading = component.querySelector(".loading");
+                    if (isComplete) {
+                        loading?.remove();
+                    } else {
+                        (image as HTMLElement).onload = () => {
+                            loading?.remove();
+                        };
+                    }
+                }
+            }
+        }
+    }
+
+    customElements.define("astro-image-wrapper", AstroImageWrapper);
+</script>
+
+<li
+    class="carousel__slide"
+    style={{ aspectRatio, minWidth }}
+>
+    <astro-image-wrapper data-uuid={uuid}>
+        <slot name="loading">
+            <Loading />
+        </slot>
+        <Picture {...Astro.props} />
+    </astro-image-wrapper>
+</li>
+
+<style lang="scss" is:global>
+    .carousel__slide {
+        box-sizing: border-box;
+        position: relative;
+        display: none;
+        align-items: center;
+        max-height: calc(100vh - (20px * 2));
+        min-height: calc(100% - (20px * 2));
+        background-color: #fff;
+        border: 4px solid #fff;
+        box-shadow: 0px 0px 20px 1px #cacaca;
+        list-style: none;
+        user-select: none;
+        overflow: hidden;
+
+        img {
+            object-fit: contain;
+            object-position: center;
+            width: 100%;
+            height: 100%;
+        }
+
+        &--visible {
+            display: flex;
+            z-index: 1;
+        }
+
+        @media screen and (min-width: 768px) {
+            border-width: 20px;
+        }
+    }
+</style>

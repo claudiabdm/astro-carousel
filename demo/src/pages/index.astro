@@ -1,19 +1,49 @@
 ---
+import { Image } from "astro:assets";
 import Layout from "../layouts/Layout.astro";
 import Carousel from "~";
+import type { ComponentProps } from "astro/types";
 
 const imagesPreview = [
-  "https://a.storyblok.com/f/95455/1350x1080/3ef7748922/p5240368.jpg/m/500x0/filters:format(webp)",
-  "https://a.storyblok.com/f/95455/1350x1080/231d2407ea/p4030184.jpg/m/500x0/filters:format(webp)",
-  "https://a.storyblok.com/f/95455/1350x1080/4aee2a00f4/p5240221.jpg/m/500x0/filters:format(webp)",
-  "",
+  "https://a.storyblok.com/f/95455/1350x1080/3ef7748922/p5240368.jpg",
+  "https://a.storyblok.com/f/95455/1350x1080/231d2407ea/p4030184.jpg",
+  "https://a.storyblok.com/f/95455/1350x1080/4aee2a00f4/p5240221.jpg",
+  "https://a.storyblok.com/f/186233/1280x1920/9563a35d39/20230714-4.jpg",
 ];
 
-const images = [
-  "https://a.storyblok.com/f/95455/1350x1080/3ef7748922/p5240368.jpg/m/1000x0/filters:format(webp)",
-  "https://a.storyblok.com/f/95455/1350x1080/231d2407ea/p4030184.jpg/m/1000x0/filters:format(webp)",
-  "https://a.storyblok.com/f/95455/1350x1080/4aee2a00f4/p5240221.jpg/m/1000x0/filters:format(webp)",
-  "",
+const images: ComponentProps<typeof Carousel>["images"] = [
+  {
+    src: "https://a.storyblok.com/f/95455/1350x1080/3ef7748922/p5240368.jpg",
+    alt: "",
+    format: "webp",
+    width: 1350,
+    height: 1080,
+    widths: [450, 675, 1350],
+  },
+  {
+    src: "https://a.storyblok.com/f/95455/1350x1080/231d2407ea/p4030184.jpg",
+    alt: "",
+    format: "webp",
+    width: 1350,
+    height: 1080,
+    widths: [450, 675, 1350],
+  },
+  {
+    src: "https://a.storyblok.com/f/95455/1350x1080/4aee2a00f4/p5240221.jpg",
+    alt: "",
+    format: "webp",
+    width: 1350,
+    height: 1080,
+    widths: [450, 675, 1350],
+  },
+  {
+    src: "https://a.storyblok.com/f/186233/1280x1920/9563a35d39/20230714-4.jpg",
+    alt: "",
+    format: "webp",
+    width: 1280,
+    height: 1920,
+    widths: [450, 675, 1350],
+  },
 ];
 ---
 
@@ -33,11 +63,12 @@ const images = [
                   data-carousel-index={i}
                   class="entry__link"
                 >
-                  <img
+                  <Image
                     src={img}
                     alt=""
-                    width="1350"
-                    height="1000"
+                    width="600"
+                    height="600"
+                    widths={[225, 450, 675, 1350]}
                     class="entry__img"
                   />
                 </a>
@@ -46,26 +77,7 @@ const images = [
           })
         }
       </ul>
-      <Carousel>
-        <ul
-          id="slides"
-          class="carousel__slides"
-        >
-          {
-            images.map((img: any) => (
-              <li class:list={["carousel__slide"]}>
-                <img
-                  src={img}
-                  alt=""
-                  width="1350"
-                  height="1000"
-                  class="entry__img"
-                />
-              </li>
-            ))
-          }
-        </ul>
-      </Carousel>
+      <Carousel images={images} />
     </div>
   </main>
 </Layout>

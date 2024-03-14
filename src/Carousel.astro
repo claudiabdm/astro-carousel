@@ -1,3 +1,13 @@
+---
+import type { ComponentProps } from "astro/types";
+import CarouselSlide from "./CarouselSlide.astro";
+
+interface Props {
+  images: Array<ComponentProps<typeof CarouselSlide>>;
+}
+const { images = [] } = Astro.props;
+---
+
 <script>
   // @ts-ignore
   // TODO: a11yDialog types
@@ -11,7 +21,7 @@
   class Carousel {
     dialog: any | null = null;
     carouselElem: HTMLElement | null = null;
-    slidesUl: HTMLUListElement | null = null;
+    slidesUl: HTMLUListElement | HTMLElement | null = null;
     prevLink: HTMLAnchorElement | null = null;
     nextLink: HTMLAnchorElement | null = null;
     closeButton: HTMLButtonElement | null = null;
@@ -335,7 +345,16 @@
         </a>
 
         <!-- Slides -->
-        <slot />
+        <ul
+          class="carousel__slides"
+          id="slides"
+        >
+          {
+            images.map((image) => (
+              <CarouselSlide {...image} />
+            ))
+          }
+        </ul>
 
         <!-- Next Link -->
         <a
@@ -411,27 +430,6 @@
       display: flex;
       align-items: center;
       justify-content: center;
-    }
-    &__slide {
-      position: absolute;
-      display: none;
-      min-width: calc(100% - (20px * 2));
-      min-height: calc(100% - (20px * 2));
-      background-color: #fff;
-      border: 5px solid #fff;
-      box-shadow: 0px 0px 20px 1px #cacaca;
-      list-style: none;
-      user-select: none;
-
-      &--visible {
-        display: flex;
-        position: relative;
-        z-index: 1;
-      }
-
-      @media screen and (min-width: 768px) {
-        border-width: 20px;
-      }
     }
 
     &__button {

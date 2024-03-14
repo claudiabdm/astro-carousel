@@ -37,20 +37,23 @@ To open the carousel from a list of images, you need to use `id="carouselTargetL
 </ul>
 ```
 
-After importing the Carousel component in your Astro component, you need to create a list of images with an `id="slides"` in the parent element and a class `carousel__slide` in the list elements. 
+After importing the Carousel component in your Astro component, you need to create a list of images and pass it as a prop. 
 
 ```js
-<Carousel>
-  <ul id="slides">
-    {
-      images.map((img: any) => (
-        <li class:list={["carousel__slide"]}>
-          <img src={img} alt=""/>
-        </li>
-      ))
-    }
-  </ul>
-</Carousel>
+---
+const images: ComponentProps<typeof Carousel>["images"] = [
+  {
+    src: "https://a.storyblok.com/f/95455/1350x1080/3ef7748922/p5240368.jpg",
+    alt: "",
+    format: "webp",
+    width: 1350,
+    height: 1080,
+    widths: [450, 675, 1350],
+  }
+];
+---
+
+<Carousel images={images} />
 ```
 
 
