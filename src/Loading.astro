@@ -1,0 +1,43 @@
+---
+---
+<div class="loading">
+    <div class="circle"></div>
+    <div class="circle"></div>
+    <div class="circle"></div>
+</div>
+<style lang="scss">
+    .loading {
+        position: absolute;
+        inset: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 8px;
+        z-index: 1;
+
+        .circle {
+            width: 8px;
+            height: 8px;
+            background-color: #cacaca;
+            border-radius: 50%;
+            animation: bounce 0.5s infinite alternate
+                cubic-bezier(0.77, 0, 0.18, 1);
+        }
+        .circle:nth-child(2) {
+            animation-delay: 0.15s;
+        }
+
+        .circle:nth-child(3) {
+            animation-delay: 0.3s;
+        }
+
+        @keyframes bounce {
+            0% {
+                opacity: 1;
+            }
+            100% {
+                opacity: 0.5;
+            }
+        }
+    }
+</style>
