@@ -24,7 +24,7 @@
     "preview": "cd demo && astro preview"
   },
   "devDependencies": {
-    "astro": "^4.5.0",
+    "astro": "^4.5.3",
     "sass": "^1.71.1"
   },
   "peerDependencies": {
