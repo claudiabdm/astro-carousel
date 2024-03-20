@@ -75,6 +75,7 @@ const { images = [] } = Astro.props;
     }
 
     open(index: number | undefined = undefined) {
+      if (index == null || Number.isNaN(index)) return;
       document.documentElement.style.overflow = "hidden";
       this.carouselElem!.classList.add("carousel--active");
       this.isOpen = true;
@@ -98,26 +99,12 @@ const { images = [] } = Astro.props;
         return;
       }
 
-      _loadImage(
-        this.slidesUl!.children[newIdx]?.firstElementChild as HTMLImageElement,
+      this.slidesUl!.children[newIdx]?.classList.add(
+        "carousel__slide--visible",
       );
 
-      if (newIdx < this.slidesUl!.children.length - 1 && oldIdx < newIdx) {
-        _loadImage(
-          this.slidesUl!.children[newIdx + 1]
-            ?.firstElementChild as HTMLImageElement,
-        );
-      } else {
-        _loadImage(
-          this.slidesUl!.children[newIdx - 1]
-            ?.firstElementChild as HTMLImageElement,
-        );
-      }
-
-      this.slidesUl!.children[newIdx].classList.add("carousel__slide--visible");
-
       if (newIdx !== oldIdx) {
-        this.slidesUl!.children[oldIdx].classList.remove(
+        this.slidesUl!.children[oldIdx]?.classList.remove(
           "carousel__slide--visible",
         );
       }
@@ -213,18 +200,15 @@ const { images = [] } = Astro.props;
       return { currentIndex, isOpen };
     }
 
-    _updateCarouselUrl(value: number | undefined = undefined) {
+    _updateCarouselUrl(newIndex: number | undefined = undefined) {
       const url = new URL(window.location.href);
-      if (value == null) {
+      if (newIndex == null) {
         url.searchParams.delete("image");
       } else {
-        url.searchParams.set("image", String(value));
+        url.searchParams.set("image", String(newIndex));
       }
       window.history.pushState({}, "", url);
-
-      // To be able to listen to popstate events window.addEventListener('popstate')
-      const popStateEvent = new PopStateEvent("popstate", {});
-      dispatchEvent(popStateEvent);
+      this._changeCurrentSlide(this.currentIdx, newIndex);
     }
   }
 
@@ -232,24 +216,23 @@ const { images = [] } = Astro.props;
   const carousel = new Carousel(carouselElement);
 
   function handleOpen(e: MouseEvent | KeyboardEvent) {
-    if (e.target instanceof HTMLElement && e.target.dataset.carouselIndex) {
+    if (e.target instanceof HTMLElement) {
+      const carouselIndex = e.target.closest<HTMLElement>(
+        "[data-carousel-index]",
+      )?.dataset.carouselIndex;
+
       if (e instanceof KeyboardEvent && e.key !== "Enter") {
         return;
       }
 
       e.preventDefault();
-      const imgIndex = Number(e.target.dataset.carouselIndex);
+
+      const imgIndex = Number(carouselIndex);
       carousel.open(imgIndex);
     }
   }
 
   //UTILITY
-  function _loadImage(img: HTMLImageElement | null) {
-    if (img && (!img.src || img.src.includes("placeholder"))) {
-      img.src = img.dataset.src ?? "";
-    }
-  }
-
   function _getPrevLink(currentIndex: number, totalItems: number) {
     const index = _getPrevIndex(currentIndex, totalItems);
     return window.location.href.replace(/\?image=*/, `?image=${index}`);
@@ -349,11 +332,7 @@ const { images = [] } = Astro.props;
           class="carousel__slides"
           id="slides"
         >
-          {
-            images.map((image) => (
-              <CarouselSlide {...image} />
-            ))
-          }
+          {images.map((image, i) => <CarouselSlide {...image} />)}
         </ul>
 
         <!-- Next Link -->
@@ -382,7 +361,10 @@ const { images = [] } = Astro.props;
   </div>
 </div>
 
-<style lang="scss" is:global>
+<style lang="scss">
+  * {
+    box-sizing: border-box;
+  }
   .carousel {
     display: unset;
     background-color: rgba(250, 250, 250, 0.5);
@@ -422,6 +404,7 @@ const { images = [] } = Astro.props;
       justify-content: space-between;
       align-items: center;
       width: 100%;
+      height: 100%;
     }
     &__slides {
       padding: 0;
@@ -430,6 +413,8 @@ const { images = [] } = Astro.props;
       display: flex;
       align-items: center;
       justify-content: center;
+      width: 100%;
+      height: calc(100% - 48px * 2);
     }
 
     &__button {
