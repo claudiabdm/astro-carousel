@@ -1,21 +1,13 @@
 ---
-import { Image } from "astro:assets";
 import Layout from "../layouts/Layout.astro";
-import Carousel from "~";
+import { Carousel, Photo } from "~";
 import type { ComponentProps } from "astro/types";
-
-const imagesPreview = [
-  "https://a.storyblok.com/f/95455/1350x1080/3ef7748922/p5240368.jpg",
-  "https://a.storyblok.com/f/95455/1350x1080/231d2407ea/p4030184.jpg",
-  "https://a.storyblok.com/f/95455/1350x1080/4aee2a00f4/p5240221.jpg",
-  "https://a.storyblok.com/f/186233/1280x1920/9563a35d39/20230714-4.jpg",
-];
 
 const images: ComponentProps<typeof Carousel>["images"] = [
   {
     src: "https://a.storyblok.com/f/95455/1350x1080/3ef7748922/p5240368.jpg",
     alt: "",
-    format: "webp",
+    formats: ["avif", "webp"],
     width: 1350,
     height: 1080,
     widths: [450, 675, 1350],
@@ -23,26 +15,26 @@ const images: ComponentProps<typeof Carousel>["images"] = [
   {
     src: "https://a.storyblok.com/f/95455/1350x1080/231d2407ea/p4030184.jpg",
     alt: "",
-    format: "webp",
+    formats: ["avif", "webp"],
     width: 1350,
     height: 1080,
-    widths: [450, 675, 1350],
+    widths: [200, 450, 675, 1350],
   },
   {
     src: "https://a.storyblok.com/f/95455/1350x1080/4aee2a00f4/p5240221.jpg",
     alt: "",
-    format: "webp",
+    formats: ["avif", "webp"],
     width: 1350,
     height: 1080,
-    widths: [450, 675, 1350],
+    widths: [200, 450, 675, 1350],
   },
   {
     src: "https://a.storyblok.com/f/186233/1280x1920/9563a35d39/20230714-4.jpg",
     alt: "",
-    format: "webp",
+    formats: ["avif", "webp"],
     width: 1280,
     height: 1920,
-    widths: [450, 675, 1350],
+    widths: [200, 450, 675, 1350],
   },
 ];
 ---
@@ -50,12 +42,13 @@ const images: ComponentProps<typeof Carousel>["images"] = [
 <Layout title="Welcome to Astro.">
   <main>
     <div class="entry">
+      <Carousel images={images} />
       <ul
         class="entry__entries"
         id="carouselTargetList"
       >
         {
-          imagesPreview.map((img, i) => {
+          images.map((img, i) => {
             return (
               <li class="entry__elem">
                 <a
@@ -63,26 +56,18 @@ const images: ComponentProps<typeof Carousel>["images"] = [
                   data-carousel-index={i}
                   class="entry__link"
                 >
-                  <Image
-                    src={img}
-                    alt=""
-                    width="600"
-                    height="600"
-                    widths={[225, 450, 675, 1350]}
-                    class="entry__img"
-                  />
+                  <Photo {...img} widths={[200, 400]}/>
                 </a>
               </li>
             );
           })
         }
       </ul>
-      <Carousel images={images} />
     </div>
   </main>
 </Layout>
 
-<style lang="scss" is:global>
+<style lang="scss">
   .entry {
     &__entries {
       display: grid;
@@ -102,8 +87,10 @@ const images: ComponentProps<typeof Carousel>["images"] = [
     }
 
     &__img {
+      object-fit: contain;
+      object-position: center;
       width: 100%;
-      height: auto;
+      min-height: 100%;
     }
 
     &__link {

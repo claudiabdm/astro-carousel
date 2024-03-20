@@ -16,17 +16,17 @@ import Carousel from 'astro-carousel';
 ````
 
 
-To open the carousel from a list of images, you need to use `id="carouselTargetList"` in the parent element and `data-carousel-index` in the anchor tag of children elements. You also need to set the `href` of the anchor tag to ```href={`${path}?image=${i}`}```.
+To open the carousel from a list of images, you need to use `id="carouselTargetList"` in the parent element and `data-carousel-index={index}` in the anchor tag of children elements. You also need to set the `href` of the anchor tag to ```href={`${path}?image=${index}`}```.
  
 ```js
 <ul id="carouselTargetList">
   {
-    images.map((img, i) => {
+    images.map((img, index) => {
       return (
         <li>
           <a
-            href={`/?image=${i}`}
-            data-carousel-index={i}
+            href={`/?image=${index}`}
+            data-carousel-index={index}
           >
             <img src={img} alt="" />
           </a>
@@ -37,7 +37,7 @@ To open the carousel from a list of images, you need to use `id="carouselTargetL
 </ul>
 ```
 
-After importing the Carousel component in your Astro component, you need to create a list of images and pass it as a prop. 
+After importing the Carousel component in your Astro component, you just need to create a list of images and pass it as a prop. 
 
 ```js
 ---
