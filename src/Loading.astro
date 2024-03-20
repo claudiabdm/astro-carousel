@@ -1,6 +1,4 @@
----
----
-<div class="loading">
+<div class="loading loading--hidden">
     <div class="circle"></div>
     <div class="circle"></div>
     <div class="circle"></div>
@@ -13,7 +11,19 @@
         justify-content: center;
         align-items: center;
         gap: 8px;
-        z-index: 1;
+        visibility: visible;
+        backdrop-filter: blur(10px);
+        transition:
+            backdrop-filter 0.35s ease-out,
+            visibility 0.35s 0.35s;
+        &--hidden {
+            backdrop-filter: blur(0px);
+            visibility: hidden;
+
+            .circle {
+                display: none;
+            }
+        }
 
         .circle {
             width: 8px;
