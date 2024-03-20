@@ -119,6 +119,16 @@ const { images = [] } = Astro.props;
         this.currentIdx,
         this.slidesUl!.childElementCount,
       );
+
+      if (this.isOpen) {
+        const image =
+          this.slidesUl!.children[newIdx]?.querySelector("picture img");
+
+        if (image instanceof HTMLImageElement) {
+          image.fetchPriority = "high";
+          image.loading = "eager";
+        }
+      }
     }
 
     _addEvents() {
@@ -135,8 +145,6 @@ const { images = [] } = Astro.props;
       this.closeButton!.addEventListener("click", this._closeHandler);
 
       document.addEventListener("keydown", this._keydownHandler);
-
-      window.addEventListener("popstate", this._updateSlideHandler);
     }
 
     _removeEvents() {
@@ -145,8 +153,6 @@ const { images = [] } = Astro.props;
       this.closeButton!.removeEventListener("click", this._closeHandler);
 
       document.removeEventListener("keydown", this._keydownHandler);
-
-      window.removeEventListener("popstate", this._updateSlideHandler);
 
       this.dialog.off("hide", this._closeHandler);
     }
