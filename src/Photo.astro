@@ -12,7 +12,7 @@ type Props = ComponentProps<typeof Picture> & {
     isCarousel?: boolean;
 };
 const {
-    class: classWrapper,
+    classWrapper,
     isCarousel = false,
     ...pictureProps
 } = Astro.props;
@@ -72,7 +72,7 @@ const heightPlaceholder = Math.max(
     data-is-carousel={isCarousel}
     data-photo={pictureProps}
     style={{ aspectRatio }}
-    class:list={[classWrapper, "wrapper"]}
+    class:list={["wrapper", classWrapper]}
 >
     <Image
         src={pictureProps.src}
