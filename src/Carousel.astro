@@ -451,7 +451,7 @@ const { images = [] } = Astro.props;
     }
     &__main {
       display: grid;
-      grid-template-columns: 0.25fr minmax(0, 90vh) 0.25fr;
+      grid-template-columns: 0.25fr minmax(0, 0.9fr) 0.25fr;
       justify-content: space-between;
       align-items: center;
       width: 100%;
@@ -487,19 +487,13 @@ const { images = [] } = Astro.props;
 
       &--right {
         justify-self: end;
+        justify-content: flex-end;
       }
       &--arrow {
         display: flex;
         align-items: center;
-        width: 100%;
         height: 50vh;
-        margin: 0;
-        @media screen and (min-width: 768px) {
-          display: block;
-          width: 48px;
-          height: 48px;
-          margin: 1rem;
-        }
+        margin: 1rem;
       }
     }
     &__svg {
