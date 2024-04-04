@@ -3,7 +3,7 @@ import type { ComponentProps } from "astro/types";
 import { Image, Picture } from "astro:assets";
 import Loading from "./Loading.astro";
 
-// TODO: maybe implement custom picture component 
+// TODO: maybe implement custom picture component
 type Props = ComponentProps<typeof Picture> & {
     src: string;
     alt: string;
@@ -11,21 +11,17 @@ type Props = ComponentProps<typeof Picture> & {
     classWrapper?: string;
     isCarousel?: boolean;
 };
-const {
-    classWrapper,
-    isCarousel = false,
-    ...pictureProps
-} = Astro.props;
+const { classWrapper, isCarousel = false, ...pictureProps } = Astro.props;
 const aspectRatio =
     Astro.props.aspectRatio ??
     Number(pictureProps.width) / Number(pictureProps.height);
 const widthPlaceholder = Math.max(
     Math.floor(Number(pictureProps.width) / 100),
-    10,
+    5,
 );
 const heightPlaceholder = Math.max(
     Math.floor(Number(pictureProps.height) / 100),
-    10 * aspectRatio,
+    5 * aspectRatio,
 );
 ---
 
@@ -81,6 +77,7 @@ const heightPlaceholder = Math.max(
         class="placeholder"
         alt=""
         loading="eager"
+        quality={10}
     />
     <Picture
         {...pictureProps}
