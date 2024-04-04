@@ -12,12 +12,15 @@
         align-items: center;
         gap: 8px;
         visibility: visible;
+        -webkit-backdrop-filter: blur(10px);
         backdrop-filter: blur(10px);
         transition:
+            -webkit-backdrop-filter 0.35s ease-out,
             backdrop-filter 0.35s ease-out,
             visibility 0.35s 0.35s;
         &--hidden {
-            backdrop-filter: blur(0px);
+            -webkit-backdrop-filter: blur(0);
+            backdrop-filter: blur(0);
             visibility: hidden;
 
             .circle {
