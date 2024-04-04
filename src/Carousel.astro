@@ -13,15 +13,11 @@ const { images = [] } = Astro.props;
   // TODO: a11yDialog types
   import A11yDialog from "https://cdn.jsdelivr.net/npm/a11y-dialog@8/dist/a11y-dialog.esm.min.js";
 
-  const carouselTargetList = document.getElementById("carouselTargetList");
-
-  carouselTargetList?.addEventListener("click", handleOpen);
-  carouselTargetList?.addEventListener("keydown", handleOpen);
-
   class Carousel {
     dialog: any | null = null;
     carouselElem: HTMLElement | null = null;
     slidesUl: HTMLUListElement | HTMLElement | null = null;
+    imagesElements: HTMLImageElement[] = [];
     prevLink: HTMLAnchorElement | null = null;
     nextLink: HTMLAnchorElement | null = null;
     closeButton: HTMLButtonElement | null = null;
@@ -29,6 +25,8 @@ const { images = [] } = Astro.props;
     isOpen: boolean = false;
 
     _keydownHandler = (e: KeyboardEvent) => {};
+    _hoverPrevHandler = (e: MouseEvent) => {};
+    _hoverNextHandler = (e: MouseEvent) => {};
     _goToPrevHandler = (e: MouseEvent) => {};
     _goToNextHandler = (e: MouseEvent) => {};
     _closeHandler = (e: MouseEvent) => {};
@@ -67,7 +65,15 @@ const { images = [] } = Astro.props;
         "carousel__slide--visible",
       );
 
-      this._changeCurrentSlide(this.currentIdx, currentIndex);
+      this.imagesElements = Array.from(this.slidesUl.children).reduce<
+        HTMLImageElement[]
+      >((acc, c) => {
+        const imgElement = c.querySelector("picture img");
+        if (imgElement instanceof HTMLImageElement) {
+          acc.push(imgElement);
+        }
+        return acc;
+      }, []);
 
       if (this.isOpen) {
         this.open(this.currentIdx);
@@ -111,6 +117,10 @@ const { images = [] } = Astro.props;
 
       this.currentIdx = newIdx;
 
+      if (this.isOpen) {
+        _loadImages(this.currentIdx, this.imagesElements);
+      }
+
       this.prevLink!.href = _getPrevLink(
         this.currentIdx,
         this.slidesUl!.childElementCount,
@@ -119,20 +129,12 @@ const { images = [] } = Astro.props;
         this.currentIdx,
         this.slidesUl!.childElementCount,
       );
-
-      if (this.isOpen) {
-        const image =
-          this.slidesUl!.children[newIdx]?.querySelector("picture img");
-
-        if (image instanceof HTMLImageElement) {
-          image.fetchPriority = "high";
-          image.loading = "eager";
-        }
-      }
     }
 
     _addEvents() {
       this._keydownHandler = this._handleKeydown.bind(this);
+      this._hoverPrevHandler = this._hoverPrev.bind(this);
+      this._hoverNextHandler = this._hoverNext.bind(this);
       this._goToPrevHandler = this._handleGoToPrev.bind(this);
       this._goToNextHandler = this._handleGoToNext.bind(this);
       this._closeHandler = this._handleClose.bind(this);
@@ -141,7 +143,9 @@ const { images = [] } = Astro.props;
       this.dialog.on("hide", this._closeHandler);
 
       this.prevLink!.addEventListener("click", this._goToPrevHandler);
+      this.prevLink!.addEventListener("mouserenter", this._hoverPrev);
       this.nextLink!.addEventListener("click", this._goToNextHandler);
+      this.nextLink!.addEventListener("mouserenter", this._hoverNext);
       this.closeButton!.addEventListener("click", this._closeHandler);
 
       document.addEventListener("keydown", this._keydownHandler);
@@ -149,7 +153,9 @@ const { images = [] } = Astro.props;
 
     _removeEvents() {
       this.prevLink!.removeEventListener("click", this._goToPrevHandler);
+      this.prevLink!.removeEventListener("mouserenter", this._hoverPrev);
       this.nextLink!.removeEventListener("click", this._goToNextHandler);
+      this.nextLink!.removeEventListener("mouserenter", this._hoverNext);
       this.closeButton!.removeEventListener("click", this._closeHandler);
 
       document.removeEventListener("keydown", this._keydownHandler);
@@ -167,6 +173,21 @@ const { images = [] } = Astro.props;
       if (e.key == "Escape") {
         this._handleClose(e);
       }
+    }
+
+    _hoverPrev(this: Carousel, e: MouseEvent) {
+      const index = _getPrevIndex(
+        this.currentIdx,
+        this.slidesUl?.childElementCount ?? 0,
+      );
+      _loadImage(this.imagesElements[index]);
+    }
+    _hoverNext(this: Carousel, e: MouseEvent) {
+      const index = _getNextIndex(
+        this.currentIdx,
+        this.slidesUl?.childElementCount ?? 0,
+      );
+      _loadImage(this.imagesElements[index]);
     }
 
     _handleGoToPrev(this: Carousel, e: MouseEvent | KeyboardEvent) {
@@ -218,6 +239,11 @@ const { images = [] } = Astro.props;
     }
   }
 
+  const carouselTargetList = document.getElementById("carouselTargetList");
+
+  carouselTargetList?.addEventListener("click", handleOpen);
+  carouselTargetList?.addEventListener("keydown", handleOpen);
+
   const carouselElement = document.getElementById("carousel");
   const carousel = new Carousel(carouselElement);
 
@@ -267,6 +293,25 @@ const { images = [] } = Astro.props;
       index = currentIndex + 1;
     }
     return index;
+  }
+
+  function _loadImages(
+    currentIndex: number,
+    imagesElements: HTMLImageElement[],
+  ) {
+    const indexes = [
+      _getPrevIndex(currentIndex, imagesElements.length),
+      _getNextIndex(currentIndex, imagesElements.length),
+    ];
+    _loadImage(imagesElements[currentIndex]);
+
+    for (const index of indexes) {
+      _loadImage(imagesElements[index]);
+    }
+  }
+
+  function _loadImage(image: HTMLImageElement) {
+    image.loading = "eager";
   }
 </script>
 
