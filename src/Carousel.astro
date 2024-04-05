@@ -21,9 +21,10 @@ const { images = [] } = Astro.props;
     prevLink: HTMLAnchorElement | null = null;
     nextLink: HTMLAnchorElement | null = null;
     closeButton: HTMLButtonElement | null = null;
-    currentIdx: number = 0;
+    currentIdx: number | null = null;
     isOpen: boolean = false;
 
+    _popstateHandler = (e: PopStateEvent) => {};
     _keydownHandler = (e: KeyboardEvent) => {};
     _hoverPrevHandler = (e: MouseEvent) => {};
     _hoverNextHandler = (e: MouseEvent) => {};
@@ -78,6 +79,9 @@ const { images = [] } = Astro.props;
       if (this.isOpen) {
         this.open(this.currentIdx);
       }
+
+      this._popstateHandler = this._handlePopstate.bind(this);
+      addEventListener("popstate", this._popstateHandler);
     }
 
     open(index: number | undefined = undefined) {
@@ -163,6 +167,22 @@ const { images = [] } = Astro.props;
       this.dialog.off("hide", this._closeHandler);
     }
 
+    // Handles back/forward events
+    _handlePopstate(this: Carousel, e: PopStateEvent) {
+      if (e.state?.imageIndex == null) {
+        // Close carousel when going back/forward to an non-carousel url
+        if (this.isOpen) {
+          this.close();
+        }
+      } else {
+        if (this.isOpen) {
+          this._changeCurrentSlide(this.currentIdx, e.state?.imageIndex);
+        } else {
+          this.open(e.state.imageIndex);
+        }
+      }
+    }
+
     _handleKeydown(this: Carousel, e: KeyboardEvent) {
       if (e.key == "ArrowLeft") {
         this._handleGoToPrev(e);
@@ -231,10 +251,23 @@ const { images = [] } = Astro.props;
       const url = new URL(window.location.href);
       if (newIndex == null) {
         url.searchParams.delete("image");
+        if (history.state?.imageIndex == null) {
+          // Avoids adding the same non-carousel url to history
+          history.replaceState(null, "", url);
+        } else {
+          // Adds new history entry each time the carousel is open
+          history.pushState(null, "", url);
+        }
       } else {
         url.searchParams.set("image", String(newIndex));
+        if (history.state?.imageIndex == null) {
+          // Adds new history entry each time the carousel is open
+          history.pushState({ imageIndex: newIndex }, "", url);
+        } else {
+          // Avoids adding each image change to history
+          history.replaceState({ imageIndex: newIndex }, "", url);
+        }
       }
-      window.history.pushState({}, "", url);
       this._changeCurrentSlide(this.currentIdx, newIndex);
     }
   }
