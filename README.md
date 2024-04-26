@@ -1,8 +1,10 @@
-# 🚧 WIP 🚧
-
 # astro-carousel 🎠
 
 An accessible carousel component for Astro 🚀 that works by using browser navigation. 
+
+Demo: https://kuraunaito.com/photos/saint-malo/?image=0
+
+<img width="1512" alt="Screenshot 2024-04-26 at 11 56 36" src="https://github.com/claudiabdm/astro-carousel/assets/44007726/8da45769-72da-4dc3-a43c-ee7151ecdc01">
 
 # How to use
 
