@@ -6,7 +6,7 @@ Demo: https://astro-carousel.pages.dev
 
 Live example: https://kuraunaito.com/photos/saint-malo/?image=0
 
-![Screenshot of astro-carousel open in a website](https://a.storyblok.com/f/95455/3024x1696/deb7c31ca9/screenshot-2024-04-26-at-12-45-24.png/m/1980x0)
+![Screenshot of astro-carousel open in a website](https://a.storyblok.com/f/95455/2560x1600/8bdc66d7ea/screenshot-2024-04-26-at-13-42-02.png/m/1280x0)
 
 # Installation
 
