@@ -7,34 +7,30 @@ const images: ComponentProps<typeof Carousel>["images"] = [
   {
     src: "https://a.storyblok.com/f/95455/1350x1080/3ef7748922/p5240368.jpg",
     alt: "",
-    formats: ["avif", "webp"],
     width: 1350,
     height: 1080,
-    widths: [450, 675, 1350],
+    widths: [200, 675, 1350],
   },
   {
     src: "https://a.storyblok.com/f/95455/1350x1080/231d2407ea/p4030184.jpg",
     alt: "",
-    formats: ["avif", "webp"],
     width: 1350,
     height: 1080,
-    widths: [200, 450, 675, 1350],
+    widths: [200, 675, 1350],
   },
   {
     src: "https://a.storyblok.com/f/95455/1350x1080/4aee2a00f4/p5240221.jpg",
     alt: "",
-    formats: ["avif", "webp"],
     width: 1350,
     height: 1080,
-    widths: [200, 450, 675, 1350],
+    widths: [200, 675, 1350],
   },
   {
-    src: "https://a.storyblok.com/f/186233/1280x1920/9563a35d39/20230714-4.jpg",
+    src: "https://a.storyblok.com/f/186233/1365x2048/3e6411d521/20230714-1.jpg",
     alt: "",
-    formats: ["avif", "webp"],
     width: 1280,
     height: 1920,
-    widths: [200, 450, 675, 1350],
+    widths: [200, 675, 1350],
   },
 ];
 ---
@@ -56,7 +52,7 @@ const images: ComponentProps<typeof Carousel>["images"] = [
                   data-carousel-index={i}
                   class="entry__link"
                 >
-                  <Photo {...img} widths={[200, 400]}/>
+                  <Photo {...img} />
                 </a>
               </li>
             );
