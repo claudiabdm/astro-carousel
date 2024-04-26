@@ -6,7 +6,13 @@ Demo: https://kuraunaito.com/photos/saint-malo/?image=0
 
 <img width="1512" alt="Screenshot 2024-04-26 at 11 56 36" src="https://github.com/claudiabdm/astro-carousel/assets/44007726/8da45769-72da-4dc3-a43c-ee7151ecdc01">
 
-# How to use
+# Installation
+
+```bash
+npm install astro-carousel
+```
+
+# Usage
 
 Import astro-carousel to your Astro component
 
@@ -16,7 +22,6 @@ import Carousel from 'astro-carousel';
 ---
 ...
 ````
-
 
 To open the carousel from a list of images, you need to use `id="carouselTargetList"` in the parent element and `data-carousel-index={index}` in the anchor tag of children elements. You also need to set the `href` of the anchor tag to ```href={`${path}?image=${index}`}```.
  
