@@ -1,6 +1,7 @@
 ---
 import type { ComponentProps } from "astro/types";
 import CarouselSlide from "./CarouselSlide.astro";
+import { ViewTransitions } from "astro:transitions";
 
 interface Props {
   images: Array<ComponentProps<typeof CarouselSlide>>;
@@ -9,6 +10,7 @@ const { images = [] } = Astro.props;
 ---
 
 <script>
+import type { TransitionBeforeSwapEvent } from "astro:transitions/client";
 import { Carousel } from "./scripts/carousel";
 
   const carouselTargetList = document.getElementById("carouselTargetList");
@@ -35,7 +37,28 @@ import { Carousel } from "./scripts/carousel";
       carousel.open(imgIndex);
     }
   }
+
+
+  // View Transitions Astro events
+  document.addEventListener("astro:before-swap", handleBeforeSwap);
+  document.addEventListener("astro:page-load", handlePageLoad);
+
+  function handleBeforeSwap(e: TransitionBeforeSwapEvent) {
+    if (e.to.searchParams.has('image')) {
+      e.viewTransition.skipTransition()
+    }
+  }
+
+  function handlePageLoad(e: PageTransitionEvent) {
+    const url = new URL(window.location.href);
+    if (url.searchParams.has('image')) {
+      const index = Number(url.searchParams.get('image'));
+      carousel.open(index)
+    }
+  }
 </script>
+
+<ViewTransitions fallback="none" />
 
 <div
   id="carousel-dialog"
