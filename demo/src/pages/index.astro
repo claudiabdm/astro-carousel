@@ -51,6 +51,7 @@ const images: ComponentProps<typeof Carousel>["images"] = [
                   href={`./?image=${i}`}
                   data-carousel-index={i}
                   class="entry__link"
+                  aria-label={`Open image number ${i + 1}`}
                 >
                   <Photo {...img} />
                 </a>
