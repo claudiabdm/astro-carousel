@@ -9,130 +9,151 @@ const { images = [] } = Astro.props;
 ---
 
 <script>
-import { Carousel } from "./scripts/carousel";
+  import { Carousel } from "./scripts/carousel";
 
-  const carouselTargetList = document.getElementById("carouselTargetList");
+  class CarouselWrapper extends HTMLElement {
+    private carouselTargetList: HTMLElement | null = null;
+    private carousel: Carousel;
+    private _openHandler: (e: MouseEvent | KeyboardEvent) => void;
 
-  carouselTargetList?.addEventListener("click", handleOpen);
-  carouselTargetList?.addEventListener("keydown", handleOpen);
+    constructor() {
+      super();
+    }
 
-  const carouselElement = document.getElementById("carousel");
-  const carousel = new Carousel(carouselElement);
+    connectedCallback() {
+      const carouselElement = this.querySelector("#carousel");
+      this.carousel = new Carousel(carouselElement as HTMLElement);
+      this.carouselTargetList = document.getElementById("carouselTargetList");
 
-  function handleOpen(e: MouseEvent | KeyboardEvent) {
-    if (e.target instanceof HTMLElement) {
-      const carouselIndex = e.target.closest<HTMLElement>(
-        "[data-carousel-index]"
-      )?.dataset.carouselIndex;
+      this._openHandler = this._handleOpen.bind(this);
+      this.carouselTargetList?.addEventListener("click", this._openHandler);
+      this.carouselTargetList?.addEventListener("keydown", this._openHandler);
+    }
 
-      if (e instanceof KeyboardEvent && e.key !== "Enter") {
-        return;
+    disconnectedCallback() {
+      this.carouselTargetList?.removeEventListener("click", this._openHandler);
+      this.carouselTargetList?.removeEventListener("keydown", this._openHandler);
+      this.carousel.close();
+    }
+
+    private _handleOpen(this: CarouselWrapper, e: MouseEvent | KeyboardEvent) {
+      if (e.target instanceof HTMLElement) {
+        const carouselIndex =
+          e.target.closest<HTMLElement>("[data-carousel-index]")?.dataset.carouselIndex;
+
+        if (e instanceof KeyboardEvent && e.key !== "Enter") {
+          return;
+        }
+
+        e.preventDefault();
+
+        const imgIndex = Number(carouselIndex);
+        this.carousel.open(imgIndex);
       }
-
-      e.preventDefault();
-
-      const imgIndex = Number(carouselIndex);
-      carousel.open(imgIndex);
     }
   }
+
+  customElements.define("carousel-wrapper", CarouselWrapper);
 </script>
 
-<div
-  id="carousel-dialog"
-  aria-hidden="true"
-  class="carousel"
-  aria-label="Carousel"
->
+<carousel-wrapper>
   <div
-    class="carousel__overlay"
-    data-a11y-dialog-hide
+    id="carousel-dialog"
+    aria-hidden="true"
+    class="carousel"
+    aria-label="Carousel"
   >
-  </div>
-  <div
-    id="carousel"
-    role="document"
-  >
-    <button
-      type="button"
-      id="closeButton"
-      class="carousel__button carousel__close"
-      aria-label="Close carousel"
-    >
-      <svg
-        class="carousel__svg"
-        xmlns="http://www.w3.org/2000/svg"
-        fill="none"
-        viewBox="0 0 24 24"
-        stroke-width="1.5"
-        stroke="currentColor"
-      >
-        <path
-          stroke-linecap="round"
-          stroke-linejoin="round"
-          d="M6 18L18 6M6 6l12 12"
-        ></path>
-      </svg>
-    </button>
     <div
-      id="carousel__wrapper"
-      class="carousel__wrapper"
+      class="carousel__overlay"
+      data-a11y-dialog-hide
     >
-      <div class="carousel__main">
-        <!-- Prev Link -->
-        <a
-          class="carousel__button carousel__button--arrow"
-          aria-label="Go to previous photo"
-          id="prevLink"
+    </div>
+    <div
+      id="carousel"
+      role="document"
+    >
+      <button
+        type="button"
+        id="closeButton"
+        class="carousel__button carousel__close"
+        aria-label="Close carousel"
+      >
+        <svg
+          class="carousel__svg"
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke-width="1.5"
+          stroke="currentColor"
         >
-          <svg
-            class="carousel__svg"
-            id="prev"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            d="M6 18L18 6M6 6l12 12"
+          ></path>
+        </svg>
+      </button>
+      <div
+        id="carousel__wrapper"
+        class="carousel__wrapper"
+      >
+        <div class="carousel__main">
+          <!-- Prev Link -->
+          <a
+            class="carousel__button carousel__button--arrow"
+            aria-label="Go to previous photo"
+            id="prevLink"
           >
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              d="M15 19l-7-7 7-7"
-            ></path>
-          </svg>
-        </a>
+            <svg
+              class="carousel__svg"
+              id="prev"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M15 19l-7-7 7-7"
+              ></path>
+            </svg>
+          </a>
 
-        <!-- Slides -->
-        <ul
-          class="carousel__slides"
-          id="slides"
-        >
-          {images.map((image, i) => <CarouselSlide {...image} />)}
-        </ul>
-
-        <!-- Next Link -->
-        <a
-          class="carousel__button carousel__button--arrow carousel__button--right"
-          aria-label="Go to next photo"
-          id="nextLink"
-        >
-          <svg
-            class="carousel__svg"
-            id="next"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
+          <!-- Slides -->
+          <ul
+            class="carousel__slides"
+            id="slides"
           >
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              d="M9 5l7 7-7 7"
-            ></path>
-          </svg>
-        </a>
+            {images.map((image, i) => <CarouselSlide {...image} />)}
+          </ul>
+
+          <!-- Next Link -->
+          <a
+            class="carousel__button carousel__button--arrow carousel__button--right"
+            aria-label="Go to next photo"
+            id="nextLink"
+          >
+            <svg
+              class="carousel__svg"
+              id="next"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M9 5l7 7-7 7"
+              ></path>
+            </svg>
+          </a>
+        </div>
       </div>
     </div>
   </div>
-</div>
+</carousel-wrapper>
 
 <style lang="scss">
   * {
