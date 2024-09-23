@@ -10,152 +10,142 @@ const { images = [] } = Astro.props;
 ---
 
 <script>
-import type { TransitionBeforeSwapEvent } from "astro:transitions/client";
 import { Carousel } from "./scripts/carousel";
 
-  const carouselTargetList = document.getElementById("carouselTargetList");
+  class CarouselWrapper extends HTMLElement {
+    connectedCallback() {
+      const carouselTargetList = document.getElementById("carouselTargetList");
 
-  carouselTargetList?.addEventListener("click", handleOpen);
-  carouselTargetList?.addEventListener("keydown", handleOpen);
+      carouselTargetList?.addEventListener("click", handleOpen);
+      carouselTargetList?.addEventListener("keydown", handleOpen);
 
-  const carouselElement = document.getElementById("carousel");
-  const carousel = new Carousel(carouselElement);
+      const carouselElement = document.getElementById("carousel");
+      const carousel = new Carousel(carouselElement);
 
-  function handleOpen(e: MouseEvent | KeyboardEvent) {
-    if (e.target instanceof HTMLElement) {
-      const carouselIndex = e.target.closest<HTMLElement>(
-        "[data-carousel-index]"
-      )?.dataset.carouselIndex;
+      function handleOpen(e: MouseEvent | KeyboardEvent) {
+        if (e.target instanceof HTMLElement) {
+          const carouselIndex = e.target.closest<HTMLElement>(
+            "[data-carousel-index]"
+          )?.dataset.carouselIndex;
 
-      if (e instanceof KeyboardEvent && e.key !== "Enter") {
-        return;
+          if (e instanceof KeyboardEvent && e.key !== "Enter") {
+            return;
+          }
+
+          e.preventDefault();
+
+          const imgIndex = Number(carouselIndex);
+          carousel.open(imgIndex);
+        }
       }
-
-      e.preventDefault();
-
-      const imgIndex = Number(carouselIndex);
-      carousel.open(imgIndex);
     }
+    
   }
 
+  customElements.define('carousel-wrapper', CarouselWrapper);
 
-  // View Transitions Astro events
-  document.addEventListener("astro:before-swap", handleBeforeSwap);
-  document.addEventListener("astro:page-load", handlePageLoad);
-
-  function handleBeforeSwap(e: TransitionBeforeSwapEvent) {
-    if (e.to.searchParams.has('image')) {
-      e.viewTransition.skipTransition()
-    }
-  }
-
-  function handlePageLoad(e: PageTransitionEvent) {
-    const url = new URL(window.location.href);
-    if (url.searchParams.has('image')) {
-      const index = Number(url.searchParams.get('image'));
-      carousel.open(index)
-    }
-  }
 </script>
 
 <ViewTransitions fallback="none" />
 
-<div
-  id="carousel-dialog"
-  aria-hidden="true"
-  class="carousel"
-  aria-label="Carousel"
->
+<carousel-wrapper>
   <div
-    class="carousel__overlay"
-    data-a11y-dialog-hide
+    id="carousel-dialog"
+    aria-hidden="true"
+    class="carousel"
+    aria-label="Carousel"
   >
-  </div>
-  <div
-    id="carousel"
-    role="document"
-  >
-    <button
-      type="button"
-      id="closeButton"
-      class="carousel__button carousel__close"
-      aria-label="Close carousel"
-    >
-      <svg
-        class="carousel__svg"
-        xmlns="http://www.w3.org/2000/svg"
-        fill="none"
-        viewBox="0 0 24 24"
-        stroke-width="1.5"
-        stroke="currentColor"
-      >
-        <path
-          stroke-linecap="round"
-          stroke-linejoin="round"
-          d="M6 18L18 6M6 6l12 12"
-        ></path>
-      </svg>
-    </button>
     <div
-      id="carousel__wrapper"
-      class="carousel__wrapper"
+      class="carousel__overlay"
+      data-a11y-dialog-hide
     >
-      <div class="carousel__main">
-        <!-- Prev Link -->
-        <a
-          class="carousel__button carousel__button--arrow"
-          aria-label="Go to previous photo"
-          id="prevLink"
+    </div>
+    <div
+      id="carousel"
+      role="document"
+    >
+      <button
+        type="button"
+        id="closeButton"
+        class="carousel__button carousel__close"
+        aria-label="Close carousel"
+      >
+        <svg
+          class="carousel__svg"
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke-width="1.5"
+          stroke="currentColor"
         >
-          <svg
-            class="carousel__svg"
-            id="prev"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            d="M6 18L18 6M6 6l12 12"
+          ></path>
+        </svg>
+      </button>
+      <div
+        id="carousel__wrapper"
+        class="carousel__wrapper"
+      >
+        <div class="carousel__main">
+          <!-- Prev Link -->
+          <a
+            class="carousel__button carousel__button--arrow"
+            aria-label="Go to previous photo"
+            id="prevLink"
           >
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              d="M15 19l-7-7 7-7"
-            ></path>
-          </svg>
-        </a>
+            <svg
+              class="carousel__svg"
+              id="prev"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M15 19l-7-7 7-7"
+              ></path>
+            </svg>
+          </a>
 
-        <!-- Slides -->
-        <ul
-          class="carousel__slides"
-          id="slides"
-        >
-          {images.map((image, i) => <CarouselSlide {...image} />)}
-        </ul>
-
-        <!-- Next Link -->
-        <a
-          class="carousel__button carousel__button--arrow carousel__button--right"
-          aria-label="Go to next photo"
-          id="nextLink"
-        >
-          <svg
-            class="carousel__svg"
-            id="next"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
+          <!-- Slides -->
+          <ul
+            class="carousel__slides"
+            id="slides"
           >
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              d="M9 5l7 7-7 7"
-            ></path>
-          </svg>
-        </a>
+            {images.map((image, i) => <CarouselSlide {...image} />)}
+          </ul>
+
+          <!-- Next Link -->
+          <a
+            class="carousel__button carousel__button--arrow carousel__button--right"
+            aria-label="Go to next photo"
+            id="nextLink"
+          >
+            <svg
+              class="carousel__svg"
+              id="next"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M9 5l7 7-7 7"
+              ></path>
+            </svg>
+          </a>
+        </div>
       </div>
     </div>
   </div>
-</div>
+</carousel-wrapper>
 
 <style lang="scss">
   * {
