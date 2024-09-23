@@ -1,7 +1,6 @@
 ---
 import type { ComponentProps } from "astro/types";
 import CarouselSlide from "./CarouselSlide.astro";
-import { ViewTransitions } from "astro:transitions";
 
 interface Props {
   images: Array<ComponentProps<typeof CarouselSlide>>;
@@ -10,43 +9,52 @@ const { images = [] } = Astro.props;
 ---
 
 <script>
-import { Carousel } from "./scripts/carousel";
+  import { Carousel } from "./scripts/carousel";
 
   class CarouselWrapper extends HTMLElement {
+    private carouselTargetList: HTMLElement | null = null;
+    private carousel: Carousel;
+    private _openHandler: (e: MouseEvent | KeyboardEvent) => void;
+
+    constructor() {
+      super();
+    }
+
     connectedCallback() {
-      const carouselTargetList = document.getElementById("carouselTargetList");
+      const carouselElement = this.querySelector("#carousel");
+      this.carousel = new Carousel(carouselElement as HTMLElement);
+      this.carouselTargetList = document.getElementById("carouselTargetList");
 
-      carouselTargetList?.addEventListener("click", handleOpen);
-      carouselTargetList?.addEventListener("keydown", handleOpen);
+      this._openHandler = this._handleOpen.bind(this);
+      this.carouselTargetList?.addEventListener("click", this._openHandler);
+      this.carouselTargetList?.addEventListener("keydown", this._openHandler);
+    }
 
-      const carouselElement = document.getElementById("carousel");
-      const carousel = new Carousel(carouselElement);
+    disconnectedCallback() {
+      this.carouselTargetList?.removeEventListener("click", this._openHandler);
+      this.carouselTargetList?.removeEventListener("keydown", this._openHandler);
+      this.carousel.close();
+    }
 
-      function handleOpen(e: MouseEvent | KeyboardEvent) {
-        if (e.target instanceof HTMLElement) {
-          const carouselIndex = e.target.closest<HTMLElement>(
-            "[data-carousel-index]"
-          )?.dataset.carouselIndex;
+    private _handleOpen(this: CarouselWrapper, e: MouseEvent | KeyboardEvent) {
+      if (e.target instanceof HTMLElement) {
+        const carouselIndex =
+          e.target.closest<HTMLElement>("[data-carousel-index]")?.dataset.carouselIndex;
 
-          if (e instanceof KeyboardEvent && e.key !== "Enter") {
-            return;
-          }
-
-          e.preventDefault();
-
-          const imgIndex = Number(carouselIndex);
-          carousel.open(imgIndex);
+        if (e instanceof KeyboardEvent && e.key !== "Enter") {
+          return;
         }
+
+        e.preventDefault();
+
+        const imgIndex = Number(carouselIndex);
+        this.carousel.open(imgIndex);
       }
     }
-    
   }
 
-  customElements.define('carousel-wrapper', CarouselWrapper);
-
+  customElements.define("carousel-wrapper", CarouselWrapper);
 </script>
-
-<ViewTransitions fallback="none" />
 
 <carousel-wrapper>
   <div
