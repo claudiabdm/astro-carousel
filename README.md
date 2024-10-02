@@ -46,10 +46,11 @@ To open the carousel from a list of images, you need to use `id="carouselTargetL
 </ul>
 ```
 
-After importing the Carousel component in your Astro component, you just need to create a list of images and pass it as a prop. 
+After importing the Carousel component in your Astro component, you just need to create a list of images and pass it to the prop `images`. 
 
 ```js
 ---
+import Carousel from 'astro-carousel';
 const images: ComponentProps<typeof Carousel>["images"] = [
   {
     src: "https://a.storyblok.com/f/95455/1350x1080/3ef7748922/p5240368.jpg",
@@ -65,5 +66,8 @@ const images: ComponentProps<typeof Carousel>["images"] = [
 <Carousel images={images} />
 ```
 
+The color of the buttons can be customized by passing the desired color in a CSS color valid format to the prop `color`.
 
-
+```js
+<Carousel images={images} color="hsl(239, 90%, 65%)" />
+```

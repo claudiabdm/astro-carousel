@@ -4,8 +4,9 @@ import CarouselSlide from "./CarouselSlide.astro";
 
 interface Props {
   images: Array<ComponentProps<typeof CarouselSlide>>;
+  color?: string;
 }
-const { images = [] } = Astro.props;
+const { images = [], color = '#333' } = Astro.props;
 ---
 
 <script>
@@ -155,7 +156,7 @@ const { images = [] } = Astro.props;
   </div>
 </carousel-wrapper>
 
-<style lang="scss">
+<style lang="scss" define:vars={{ astroCarouselColor: color }}>
   * {
     box-sizing: border-box;
   }
@@ -214,7 +215,6 @@ const { images = [] } = Astro.props;
       width: 100%;
       height: calc(100% - 48px * 2);
     }
-
     &__button {
       width: 48px;
       height: 48px;
@@ -222,14 +222,14 @@ const { images = [] } = Astro.props;
       background: none;
       margin: 1rem;
       padding: 0;
-      color: var(--tertiary);
+      color: var(--astroCarouselColor);
       z-index: 2;
       &:hover {
         cursor: pointer;
-        color: var(--secondary);
+        opacity: 0.6;
       }
       &:focus-visible {
-        outline: dashed 2px var(--primary);
+        outline: dashed 2px var(--astroCarouselColor);
       }
 
       &--right {
