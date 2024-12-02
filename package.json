@@ -10,6 +10,13 @@
     "src",
     "index.ts"
   ],
+  "homepage": "https://github.com/claudiabdm/astro-carousel",
+  "license": "MIT",
+  "bugs": "https://github.com/claudiabdm/astro-carousel/issues",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/claudiabdm/astro-carousel.git"
+  },
   "keywords": [
     "astro-component",
     "astro",
