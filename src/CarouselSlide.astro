@@ -10,7 +10,7 @@ type Props = ComponentProps<typeof Picture> & {
 const { width: w, height: h } = Astro.props;
 const aspectRatio = Number(w) / Number(h);
 const width = aspectRatio > 1 ? '100%' : 'auto';
-const height = aspectRatio > 1 ? 'auto' : '100%';
+const height = '100%';
 ---
 
 <li

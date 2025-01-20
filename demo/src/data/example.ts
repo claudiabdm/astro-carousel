@@ -30,4 +30,11 @@ export const images: ComponentProps<typeof Carousel>["images"] = [
     height: 1920,
     widths: [200, 675, 1350],
   },
+  {
+    src: "https://a.storyblok.com/f/186233/2048x1152/769cb67f47/lonely-bay.jpg",
+    alt: "",
+    width: 2048,
+    height: 1152,
+    widths: [200, 675, 1350],
+  },
 ];
