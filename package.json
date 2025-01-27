@@ -3,6 +3,7 @@
   "version": "3.0.1",
   "type": "module",
   "main": "./index.ts",
+  "license": "MIT",
   "exports": {
     ".": "./index.ts"
   },
