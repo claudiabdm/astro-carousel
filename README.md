@@ -1,8 +1,8 @@
 # astro-carousel 🎠
 
-An accessible carousel component for Astro 🚀 that works by using browser navigation. 
+An accessible carousel component for Astro 🚀 that works by using browser navigation.
 
-Demo: https://astro-carousel.pages.dev
+Demo with code: https://stackblitz.com/edit/astro-carousel-demo?file=src%2Fcomponents%2FWelcome.astro
 
 Live example: https://kuraunaito.com/photos/saint-malo/?image=0
 
@@ -14,39 +14,46 @@ Live example: https://kuraunaito.com/photos/saint-malo/?image=0
 npm install astro-carousel
 ```
 
+Also, `sass` needs to be installed a dev dependency:
+
+```bash
+npm install --save-dev sass
+```
+
 # Usage
 
 Import astro-carousel to your Astro component
 
-````js
+```js
 ---
-import Carousel from 'astro-carousel';
+import { Carousel } from 'astro-carousel';
 ---
 ...
-````
+```
 
-To open the carousel from a list of images, you need to use `id="carouselTargetList"` in the parent element and `data-carousel-index={index}` in the anchor tag of children elements. You also need to set the `href` of the anchor tag to ```href={`${path}?image=${index}`}```.
- 
+To open the carousel from a list of images, you need to use `id="carouselTargetList"` in the parent element and `data-carousel-index={index}` in the anchor tag of children elements. You also need to set the `href` of the anchor tag to `` href={`${path}?image=${index}`} ``.
+
 ```js
 <ul id="carouselTargetList">
-  {
-    images.map((img, index) => {
-      return (
-        <li>
-          <a
-            href={`/?image=${index}`}
-            data-carousel-index={index}
-          >
-            <img src={img} alt="" />
-          </a>
-        </li>
-      );
-    })
-  }
+  {images.map((img, index) => {
+    return (
+      <li>
+        <a
+          href={`/?image=${index}`}
+          data-carousel-index={index}
+        >
+          <img
+            src={img.src}
+            alt=""
+          />
+        </a>
+      </li>
+    );
+  })}
 </ul>
 ```
 
-After importing the Carousel component in your Astro component, you just need to create a list of images and pass it to the prop `images`. 
+After importing the Carousel component in your Astro component, you just need to create a list of images and pass it to the prop `images`.
 
 ```js
 ---
@@ -69,5 +76,8 @@ const images: ComponentProps<typeof Carousel>["images"] = [
 The color of the buttons can be customized by passing the desired color in a CSS color valid format to the prop `color`.
 
 ```js
-<Carousel images={images} color="hsl(239, 90%, 65%)" />
+<Carousel
+  images={images}
+  color="hsl(239, 90%, 65%)"
+/>
 ```
