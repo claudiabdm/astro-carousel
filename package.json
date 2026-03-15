@@ -1,6 +1,6 @@
 {
   "name": "astro-carousel",
-  "version": "3.0.3",
+  "version": "3.0.4",
   "type": "module",
   "main": "./index.ts",
   "license": "MIT",
@@ -26,10 +26,10 @@
     "preview": "cd demo && astro preview"
   },
   "devDependencies": {
-    "astro": "^5.1.7",
+    "astro": "^6.0.4",
     "sass": "^1.71.1"
   },
   "peerDependencies": {
-    "astro": "^5.1.7"
+    "astro": "^6.0.4"
   }
 }
