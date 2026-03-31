@@ -4,60 +4,60 @@ import { type Picture } from "astro:assets";
 import Photo from "./Photo.astro";
 
 type Props = ComponentProps<typeof Picture> & {
-    src: string;
-    alt: string;
+  src: string;
+  alt: string;
 };
 const { width: w, height: h } = Astro.props;
 const aspectRatio = Number(w) / Number(h);
-const width = aspectRatio > 1 ? '100%' : 'auto';
-const height = '100%';
+const width = aspectRatio > 1 ? "100%" : "auto";
+const height = "100%";
 ---
 
 <li
-    class="carousel__slide"
-    style={{ aspectRatio, width, height }}
+  class="carousel__slide"
+  style={{ aspectRatio, width, height }}
 >
-    <Photo
-        {...Astro.props}
-        classWrapper="carousel__slide-photo"
-        aspectRatio={aspectRatio}
-        isCarousel={true}
-        loading="lazy"
-    />
+  <Photo
+    {...Astro.props}
+    classWrapper="carousel__slide-photo"
+    aspectRatio={aspectRatio}
+    isCarousel={true}
+    loading="lazy"
+  />
 </li>
 
-<style lang="scss">
-    .carousel__slide {
-        position: absolute;
-        display: none;
-        justify-content: center;
-        align-items: center;
-        max-width: 100%;
-        list-style: none;
-        user-select: none;
-        pointer-events: none;
+<style>
+  .carousel__slide {
+    position: absolute;
+    display: none;
+    justify-content: center;
+    align-items: center;
+    max-width: 100%;
+    list-style: none;
+    user-select: none;
+    pointer-events: none;
+  }
+  .carousel__slide * {
+    pointer-events: all;
+  }
 
-        * {
-            pointer-events: all;
-        }
+  .carousel__slide--visible {
+    display: flex;
+    z-index: 1;
+  }
 
-        &--visible {
-            display: flex;
-            z-index: 1;
-        }
-    }
-
+  :global(.carousel__slide-photo) {
+    max-height: calc(100vh - 20px * 2);
+    background-color: #fff;
+    box-shadow: 0px 0px 20px 1px #cacaca;
+    border: 8px solid #fff;
+  }
+  .carousel__slide-photo > * {
+    flex-basis: 100%;
+  }
+  @media screen and (min-width: 768px) {
     :global(.carousel__slide-photo) {
-        max-height: calc(100vh - 20px * 2);
-        background-color: #fff;
-        box-shadow: 0px 0px 20px 1px #cacaca;
-        border: 8px solid #fff;
-
-        & > * {
-            flex-basis: 100%;
-        }
-        @media screen and (min-width: 768px) {
-            border-width: 20px;
-        }
+      border-width: 20px;
     }
+  }
 </style>
