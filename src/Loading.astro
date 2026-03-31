@@ -1,56 +1,55 @@
 <div class="loading">
-    <div class="circle"></div>
-    <div class="circle"></div>
-    <div class="circle"></div>
+  <div class="circle"></div>
+  <div class="circle"></div>
+  <div class="circle"></div>
 </div>
-<style lang="scss">
-    .loading {
-        position: absolute;
-        inset: 0;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        gap: 8px;
-        visibility: visible;
-        -webkit-backdrop-filter: blur(10px);
-        backdrop-filter: blur(10px);
-        transition:
-            -webkit-backdrop-filter 0.35s ease-out,
-            backdrop-filter 0.35s ease-out,
-            visibility 0.35s 0.35s;
-        &--hidden {
-            -webkit-backdrop-filter: blur(0);
-            backdrop-filter: blur(0);
-            visibility: hidden;
+<style>
+  .loading {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+    visibility: visible;
+    -webkit-backdrop-filter: blur(10px);
+    backdrop-filter: blur(10px);
+    transition:
+      -webkit-backdrop-filter 0.35s ease-out,
+      backdrop-filter 0.35s ease-out,
+      visibility 0.35s 0.35s;
+  }
 
-            .circle {
-                display: none;
-            }
-        }
+  .loading--hidden {
+    -webkit-backdrop-filter: blur(0);
+    backdrop-filter: blur(0);
+    visibility: hidden;
+  }
+  .loading--hidden .circle {
+    display: none;
+  }
 
-        .circle {
-            width: 8px;
-            height: 8px;
-            background-color: #cacaca;
-            border-radius: 50%;
-            animation: bounce 0.5s infinite alternate
-                cubic-bezier(0.77, 0, 0.18, 1);
-        }
-        .circle:nth-child(2) {
-            animation-delay: 0.15s;
-        }
+  .circle {
+    width: 8px;
+    height: 8px;
+    background-color: #cacaca;
+    border-radius: 50%;
+    animation: bounce 0.5s infinite alternate cubic-bezier(0.77, 0, 0.18, 1);
+  }
+  .circle:nth-child(2) {
+    animation-delay: 0.15s;
+  }
 
-        .circle:nth-child(3) {
-            animation-delay: 0.3s;
-        }
+  .circle:nth-child(3) {
+    animation-delay: 0.3s;
+  }
 
-        @keyframes bounce {
-            0% {
-                opacity: 1;
-            }
-            100% {
-                opacity: 0.5;
-            }
-        }
+  @keyframes bounce {
+    0% {
+      opacity: 1;
     }
+    100% {
+      opacity: 0.5;
+    }
+  }
 </style>

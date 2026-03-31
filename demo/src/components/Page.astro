@@ -32,34 +32,28 @@ import Photo from "~/src/Photo.astro";
   </ul>
 </div>
 
-<style lang="scss">
-  .entry {
-    &__entries {
-      display: grid;
-      grid-template-columns: 1fr 1fr 1fr;
-      justify-content: center;
-      align-items: center;
-      gap: 8px;
-      margin: 0;
-      padding: 0;
-      list-style: none;
-    }
+<style>
+  .entry__entries {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  .entry__elem:hover {
+    cursor: pointer;
+  }
+  .entry__img {
+    object-fit: contain;
+    object-position: center;
+    width: 100%;
+    min-height: 100%;
+  }
 
-    &__elem {
-      &:hover {
-        cursor: pointer;
-      }
-    }
-
-    &__img {
-      object-fit: contain;
-      object-position: center;
-      width: 100%;
-      min-height: 100%;
-    }
-
-    &__link {
-      display: block;
-    }
+  .entry__link {
+    display: block;
   }
 </style>
